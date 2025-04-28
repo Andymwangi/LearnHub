@@ -14,13 +14,9 @@ interface CourseWithProgress extends Course {
   progress: number;
 }
 
-interface RecommendedCourse {
-  id: string;
-  title: string;
-  description: string;
-  imageUrl: string;
-  price: number;
+interface RecommendedCourse extends Course {
   category: { name: string };
+  chapters: { id: string }[];
 }
 
 // Mock courses data with Kenyan and international context
@@ -76,27 +72,45 @@ const myCourses: CourseWithProgress[] = [
 const recommendedCourses: RecommendedCourse[] = [
   {
     id: "4",
+    userId: "user1",
     title: "Mobile Money Solutions",
     description: "Understanding and developing mobile payment systems for the African market",
     imageUrl: "https://images.unsplash.com/photo-1563986768609-322da13575f3",
     price: 3499,
-    category: { name: "Finance" }
+    isPublished: true,
+    categoryId: "cat4",
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    category: { name: "Finance" },
+    chapters: Array(8).fill({ id: "ch1" })
   },
   {
     id: "5",
+    userId: "user1",
     title: "International Trade Law",
     description: "Navigate global trade regulations and opportunities for African businesses",
     imageUrl: "https://images.unsplash.com/photo-1589829545856-d10d557cf95f",
     price: 4499,
-    category: { name: "Law" }
+    isPublished: true,
+    categoryId: "cat5",
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    category: { name: "Law" },
+    chapters: Array(10).fill({ id: "ch1" })
   },
   {
     id: "6",
+    userId: "user1",
     title: "Renewable Energy Systems",
     description: "Implementing sustainable energy solutions for East African communities",
     imageUrl: "https://images.unsplash.com/photo-1508514177221-188b1cf16e9d",
     price: 3999,
-    category: { name: "Engineering" }
+    isPublished: true,
+    categoryId: "cat6",
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    category: { name: "Engineering" },
+    chapters: Array(12).fill({ id: "ch1" })
   }
 ];
 
