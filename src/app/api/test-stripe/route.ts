@@ -24,14 +24,19 @@ export async function POST(req: NextRequest) {
     const orderID = `PAY-${Math.random().toString(36).substring(2, 15)}`;
     
     // Store order information in database
-    await db.paypalOrder.create({
+    await db.paymentRecord.create({
       data: {
-        orderId: orderID,
         userId,
         courseId,
+        provider: "paypal",
         amount: price,
         currency: "USD",
-        status: "CREATED"
+        transactionId: orderID,
+        status: "pending",
+        metadata: {
+          orderType: "test",
+          courseTitle
+        }
       }
     });
     

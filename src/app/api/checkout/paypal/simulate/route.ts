@@ -5,6 +5,9 @@ import { db } from "@/lib/db";
 import { sendCourseEnrollmentEmail } from "@/lib/email";
 import { redirect } from "next/navigation";
 
+// Force dynamic rendering for this route
+export const dynamic = 'force-dynamic';
+
 // This endpoint simulates a PayPal payment flow
 export async function GET(req: NextRequest) {
   try {

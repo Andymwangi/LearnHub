@@ -55,7 +55,7 @@ export async function GET(req: NextRequest) {
       title: string;
       price: number | null;
       imageUrl: string | null;
-      user: { name: string } | null;
+      user: { name: string | null } | null;
     }) => ({
       id: course.id,
       title: course.title,

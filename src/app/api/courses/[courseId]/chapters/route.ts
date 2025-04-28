@@ -76,7 +76,7 @@ export async function GET(
     const chapters = course.chapters.map((chapter: {
       id: string;
       title: string;
-      description: string;
+      description: string | null;
       position: number;
       isFree: boolean;
       videoUrl: string | null;

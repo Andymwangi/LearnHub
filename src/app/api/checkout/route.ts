@@ -4,12 +4,12 @@ import { z } from "zod";
 
 import { db } from "@/lib/db";
 import { authOptions } from "@/lib/auth";
-import { createCheckoutSession } from "@/lib/stripe";
 import { sendCourseEnrollmentEmail } from "@/lib/email";
 
 const checkoutSchema = z.object({
   courseId: z.string().uuid(),
   returnUrl: z.string().url().optional(),
+  paymentMethod: z.enum(["paypal", "mpesa"]).optional(),
 });
 
 export async function POST(req: NextRequest) {
@@ -33,7 +33,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const { courseId, returnUrl } = validation.data;
+    const { courseId, returnUrl, paymentMethod = "paypal" } = validation.data;
 
     // Check if the user already has access to this course
     const existingPurchase = await db.purchase.findUnique({
@@ -98,17 +98,32 @@ export async function POST(req: NextRequest) {
     const successUrl = `${origin}/dashboard/courses/${courseId}?success=1`;
     const cancelUrl = returnUrl || `${origin}/courses/${courseId}?canceled=1`;
 
-    // Create checkout session with Stripe
-    const stripeSession = await createCheckoutSession({
-      userId: session.user.id,
-      courseId: course.id,
-      courseTitle: course.title,
-      price: course.price,
-      successUrl,
-      cancelUrl,
+    // Record the payment intent
+    const paymentRecord = await db.paymentRecord.create({
+      data: {
+        userId: session.user.id,
+        courseId: course.id,
+        provider: paymentMethod,
+        amount: course.price,
+        currency: "KES",
+        status: "pending",
+        metadata: {
+          courseTitle: course.title
+        }
+      }
     });
 
-    return NextResponse.json({ url: stripeSession.url });
+    // Redirect to appropriate payment page based on selected method
+    if (paymentMethod === "mpesa") {
+      return NextResponse.json({ 
+        url: `/payment/mpesa?recordId=${paymentRecord.id}&courseId=${courseId}` 
+      });
+    } else {
+      // Default to PayPal
+      return NextResponse.json({ 
+        url: `/payment/paypal?recordId=${paymentRecord.id}&courseId=${courseId}` 
+      });
+    }
   } catch (error) {
     console.error("[CHECKOUT_POST]", error);
     return NextResponse.json(
@@ -118,11 +133,12 @@ export async function POST(req: NextRequest) {
   }
 }
 
-// Handle Stripe webhook for successful payments
+// Handle successful payments
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const courseId = searchParams.get("courseId");
   const success = searchParams.get("success");
+  const paymentId = searchParams.get("paymentId");
   
   if (!courseId || success !== "1") {
     return NextResponse.json(
@@ -141,7 +157,15 @@ export async function GET(req: NextRequest) {
       );
     }
     
-    // Record purchase success (this would normally be done by a webhook)
+    // Update the payment record if paymentId is provided
+    if (paymentId) {
+      await db.paymentRecord.update({
+        where: { id: paymentId },
+        data: { status: "completed" }
+      });
+    }
+    
+    // Record purchase success
     const purchase = await db.purchase.create({
       data: {
         userId: session.user.id,

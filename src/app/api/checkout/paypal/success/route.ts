@@ -5,6 +5,9 @@ import { db } from "@/lib/db";
 import { capturePayPalPayment, validatePayPalPayment } from "@/lib/paypal";
 import { sendCourseEnrollmentEmail } from "@/lib/email";
 
+// Force dynamic rendering for this route
+export const dynamic = 'force-dynamic';
+
 export async function GET(req: NextRequest) {
   try {
     const session = await getServerSession(authOptions);
