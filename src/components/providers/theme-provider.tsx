@@ -1,5 +1,6 @@
 "use client";
 
+import * as React from "react";
 import { useEffect, useState, createContext, useContext } from "react";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 import type { ThemeProviderProps } from "next-themes";
@@ -59,16 +60,19 @@ export function ThemeProvider({ children, ...props }: ThemeProviderProps) {
       document.documentElement.classList.add('dark');
       document.documentElement.classList.remove('light');
       document.documentElement.setAttribute("data-theme", "dark");
+      document.body.style.backgroundColor = "hsl(var(--background))";
     } else if (newTheme === 'light') {
       document.documentElement.classList.add('light');
       document.documentElement.classList.remove('dark');
       document.documentElement.setAttribute("data-theme", "light");
+      document.body.style.backgroundColor = "hsl(var(--background))";
     } else {
       // Handle system preference
       const systemPrefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
       document.documentElement.classList.toggle('dark', systemPrefersDark);
       document.documentElement.classList.toggle('light', !systemPrefersDark);
       document.documentElement.setAttribute("data-theme", systemPrefersDark ? "dark" : "light");
+      document.body.style.backgroundColor = "hsl(var(--background))";
     }
   };
 

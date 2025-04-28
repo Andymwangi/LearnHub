@@ -289,21 +289,6 @@ export default function Home() {
                     </Link>
                   </Button>
                 </div>
-                
-                <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-muted-foreground mt-4">
-                  <div className="flex items-center gap-1.5">
-                    <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                    <span className="font-medium">4.8/5 Ratings</span>
-                  </div>
-                  <div className="flex items-center gap-1.5">
-                    <Users className="h-4 w-4" />
-                    <span className="font-medium">10K+ Students</span>
-                  </div>
-                  <div className="flex items-center gap-1.5">
-                    <Globe className="h-4 w-4" />
-                    <span className="font-medium">Global Community</span>
-                  </div>
-                </div>
               </MotionDiv>
               
               <MotionDiv
@@ -324,18 +309,6 @@ export default function Home() {
                 <div className="absolute bottom-6 left-6 right-6 p-6 bg-white/95 dark:bg-black/90 rounded-lg shadow-lg backdrop-blur-sm">
                   <h3 className="font-semibold text-lg mb-2">Start learning today</h3>
                   <p className="text-muted-foreground text-sm">Join thousands of students who have transformed their careers through our courses.</p>
-                  <div className="mt-4 flex items-center gap-2">
-                    <div className="flex -space-x-2">
-                      {[1, 2, 3, 4].map((i) => (
-                        <div key={i} className="h-8 w-8 rounded-full bg-primary/15 border border-neutral-200/40 dark:border-neutral-800/40 flex items-center justify-center text-xs font-medium">
-                          {i % 2 === 0 ? 'S' : 'A'}
-                        </div>
-                      ))}
-                    </div>
-                    <div className="ml-2 text-xs text-muted-foreground">
-                      <span className="font-medium">+258</span> joined today
-                    </div>
-                  </div>
                 </div>
               </MotionDiv>
             </div>
@@ -478,13 +451,13 @@ export default function Home() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {[
                 {
-                  name: "Sarah Johnson",
+                  name: "Sarah Mwaniki",
                   title: "Front-end Developer",
                   content: "The courses on LearnHub completely transformed my career. I went from knowing basic HTML to becoming a confident front-end developer in just a few months.",
                   rating: 5,
                 },
                 {
-                  name: "Michael Chen",
+                  name: "Michael Brian",
                   title: "Data Scientist",
                   content: "The data science curriculum is comprehensive and up-to-date. The instructors are experts in their fields and the projects helped me build a strong portfolio.",
                   rating: 5,
@@ -542,7 +515,7 @@ export default function Home() {
                   </p>
                   <ul className="space-y-2 mb-8">
                     {[
-                      "Access to all 10,000+ courses",
+                      "Access to all our courses",
                       "Learn at your own pace",
                       "New courses added regularly",
                       "Certificates of completion",
